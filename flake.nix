@@ -49,6 +49,10 @@
               python3
             ]
             ++ libraries;
+
+          shellHook = ''
+            git config --local core.hooksPath .githooks/
+          '';
         };
 
         apps.default = {
