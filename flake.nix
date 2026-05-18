@@ -16,12 +16,28 @@
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        lib = pkgs.lib;
+        libraries = with pkgs; [
+          python3Packages.questionary
+        ];
       in
       {
+        packages.default = pkgs.writers.writePython3Bin "git-cc-script" {
+          inherit libraries;
+        } (builtins.readFile ./script.py);
+
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            python3
-          ];
+          packages =
+            with pkgs;
+            [
+              python3
+            ]
+            ++ libraries;
+        };
+
+        apps.default = {
+          type = "app";
+          program = lib.getExe self.packages.${system}.default;
         };
       }
     );
