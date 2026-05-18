@@ -1,0 +1,6 @@
+{
+  "reviewers": ["MasterEvarior"],
+  "nix": {
+    "enabled": true
+  }
+}

@@ -34,6 +34,9 @@
 
             # GitHub Workflows
             yamllint.enable = true;
+
+            # Renovate
+            prettier.enable = true;
           };
         };
       in
