@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs =
@@ -11,6 +12,7 @@
       self,
       nixpkgs,
       flake-utils,
+      treefmt-nix,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -20,6 +22,20 @@
         libraries = with pkgs; [
           python3Packages.questionary
         ];
+        treefmtEval = treefmt-nix.lib.evalModule pkgs {
+          projectRootFile = "flake.nix";
+          programs = {
+            # Code and Flake
+            black.enable = true;
+            nixfmt.enable = true;
+
+            # README.md
+            mdformat.enable = true;
+
+            # GitHub Workflows
+            yamllint.enable = true;
+          };
+        };
       in
       {
         packages.default = pkgs.writers.writePython3Bin "git-cc-script" {
@@ -39,6 +55,8 @@
           type = "app";
           program = lib.getExe self.packages.${system}.default;
         };
+
+        formatter = treefmtEval.config.build.wrapper;
       }
     );
 }
