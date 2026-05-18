@@ -34,3 +34,6 @@
 
 ### Nix ###
 result
+
+### Direnv ###
+.direnv/
