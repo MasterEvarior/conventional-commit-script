@@ -58,6 +58,7 @@
         apps.default = {
           type = "app";
           program = lib.getExe self.packages.${system}.default;
+          meta.description = "A simple python script that helps you generate conventional-commit messages";
         };
 
         formatter = treefmtEval.config.build.wrapper;
