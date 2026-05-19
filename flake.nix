@@ -68,6 +68,20 @@
 
         checks = {
           lint = treefmtEval.config.build.check self;
+          displayHelp =
+            pkgs.runCommand "check-help-argument"
+              {
+                nativeBuildInputs = [
+                  self.packages.${system}.default
+                ];
+              }
+              ''
+                ${
+                  lib.getExe self.packages.${system}.default
+                } --help | grep "Interactively create a Conventional Commit message."
+                mkdir $out
+              '';
+
         };
       }
     );
