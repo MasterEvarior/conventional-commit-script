@@ -65,6 +65,10 @@
         };
 
         formatter = treefmtEval.config.build.wrapper;
+
+        checks = {
+          lint = treefmtEval.config.build.check self;
+        };
       }
     );
 }
