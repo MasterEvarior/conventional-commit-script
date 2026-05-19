@@ -6,6 +6,7 @@ conventional commit message using keyboard navigation.
 import questionary as q
 import sys
 import subprocess
+import argparse
 
 
 def get_commit_type():
@@ -100,6 +101,27 @@ def main():
     """
     Main function to orchestrate the commit message creation.
     """
+    parser = argparse.ArgumentParser(
+        description="Interactively create a Conventional Commit message.",
+        epilog=(
+            "Commit types follow the Conventional Commits spec: "
+            "https://www.conventionalcommits.org\n\n"
+            "Examples:\n"
+            "  feat(auth): add OAuth2 login #42\n"
+            "  fix!: correct null pointer in parser\n"
+            "  chore(deps): bump requests to 2.31.0"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        help="Do not commit, only print out the commit message",
+    )
+
+    args = parser.parse_args()
+
     try:
         commit_type = get_commit_type()
         scope = get_scope()
@@ -122,6 +144,9 @@ def main():
         print("=" * 50)
         print(commit_message)
         print("=" * 50)
+
+        if args.dry_run:
+            return
 
         create_commit = q.confirm(
             "Do you want to create this commit now?", default=True
